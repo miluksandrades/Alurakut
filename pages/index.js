@@ -49,7 +49,7 @@ export default function Home() {
               {amigos.map((item) =>{
                 return (
                   <li>
-                    <a href={`/users/${item}`} key={item}>
+                    <a href={`https://github.com/${item}`} target="_blank" key={item}>
                       <img src={`https://github.com/${item}.png`} />
                       <span>{item}</span>
                     </a>
