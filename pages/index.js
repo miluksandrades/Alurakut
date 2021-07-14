@@ -2,12 +2,13 @@ import React from 'react';
 import MainGrid from '../src/components/MainGrid';
 import Box from '../src/components/Box';
 import { AlurakutMenu, AlurakutProfileSidebarMenuDefault, OrkutNostalgicIconSet } from '../src/lib/AluraCommons';
-import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
 import { Comunidade } from '../src/components/Comunidade';
+import { Followers } from '../src/components/Followers';
+import { Friends } from '../src/components/Friends';
 
 function ProfileSidebar(props) {
   return (
-    <Box>
+    <Box as="aside">
       <img src={`https://github.com/${props.githubUser}.png`} style={{ borderRadius: '8px' }} />
       <hr />
 
@@ -25,8 +26,7 @@ function ProfileSidebar(props) {
 export default function Home() {
 
   const githubUser = 'miluksandrades';
-  const [comunidades, setComunity] = React.useState([
-    {
+  const [comunidades, setComunity] = React.useState([{
       id: '1',
       title: 'Eu odeio acordar cedo',
       image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
@@ -38,17 +38,7 @@ export default function Home() {
       image: 'https://yt3.ggpht.com/ytc/AKedOLRszi3O39AB5-uw_1jkrxJppwegjToBgIKFIOqiiA=s900-c-k-c0x00ffffff-no-rj',
       url: 'https://github.com/topics/alurakut'
     }
-]);
-
-  const amigos = [
-    'diego3g',
-    'rafaballerini',
-    'peas',
-    'coutinhonobre',
-    'omariosouto',
-    'filipedeschamps',
-    'miluksandrades'
-  ];
+  ]);
 
   return (
     <>
@@ -67,6 +57,7 @@ export default function Home() {
           </Box>
           <Box>
             <h2 className="subtitle">O que você deseja fazer?</h2>
+            <hr />
             <form onSubmit={function handleComunity(e) {
               e.preventDefault();
 
@@ -108,23 +99,9 @@ export default function Home() {
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
-          <ProfileRelationsBoxWrapper >
-            <h2 className="smallTitle">
-              Amigos ({amigos.length})
-            </h2>
-            <ul>
-              {amigos.slice(0, 6).map((item) => {
-                return (
-                  <li key={item}>
-                    <a href={`https://github.com/${item}`} target="_blank">
-                      <img src={`https://github.com/${item}.png`} />
-                      <span>{item}</span>
-                    </a>
-                  </li>
-                )
-              })}
-            </ul>
-          </ProfileRelationsBoxWrapper>
+          <Followers />
+
+          <Friends />
 
           <Comunidade comunidades={comunidades}/>
 

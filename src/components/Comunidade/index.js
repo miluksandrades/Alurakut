@@ -2,6 +2,7 @@ import { ProfileRelationsBoxWrapper } from "../ProfileRelations";
 
 export function Comunidade({comunidades}){
     const size = 6;
+    
     return (
         <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
