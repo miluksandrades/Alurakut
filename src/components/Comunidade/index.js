@@ -11,7 +11,7 @@ export function Comunidade({comunidades}){
             <ul>
               {comunidades.slice(0, size).map((item) => {
                   return (
-                    <li key={item.id}>
+                    <li key={item.createdAt}>
                       <a href={`${item.url}`} target="_blank" >
                         <img src={`${item.image}`} alt="Capa"/>
                         <span>{item.title}</span>

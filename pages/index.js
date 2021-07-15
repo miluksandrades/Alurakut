@@ -24,21 +24,42 @@ function ProfileSidebar(props) {
 }
 
 export default function Home() {
+  const token = '5067fb971a1711c62fd833d3b99a44'
 
   const githubUser = 'miluksandrades';
-  const [comunidades, setComunity] = React.useState([{
-      id: '1',
-      title: 'Eu odeio acordar cedo',
-      image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
-      url: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
-    },
-    {
-      id: '2',
-      title: 'Comunidade Alura',
-      image: 'https://yt3.ggpht.com/ytc/AKedOLRszi3O39AB5-uw_1jkrxJppwegjToBgIKFIOqiiA=s900-c-k-c0x00ffffff-no-rj',
-      url: 'https://github.com/topics/alurakut'
-    }
+  const [comunidades, setComunity] = React.useState([
   ]);
+
+  React.useEffect(() => {
+    fetch('https://graphql.datocms.com/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          query: `query{
+          allCommunities {
+            id
+            createdAt
+            title
+            image
+            url
+          }
+        }`
+        })
+      })
+      .then(res => res.json())
+      .then((res) => {
+        const community = res.data.allCommunities;
+        setComunity(community)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+  })
 
   return (
     <>
@@ -64,15 +85,25 @@ export default function Home() {
               const dadosForm = new FormData(e.target);
 
               const comunidade = {
-                id: new Date().toISOString(),
                 title: dadosForm.get('title'),
                 image: 'https://picsum.photos/300/300?'+dadosForm.get('image'),
                 url: dadosForm.get('url')
               }
 
-              const getComunity = [...comunidades, comunidade];
+              fetch('/api/communitys', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(comunidade)
+              })
+              .then(async (res) =>{
+                const dados = await res.json();
+                const comunidade = dados.registroCriado
+                const getComunity = [...comunidades, comunidade];  
+                setComunity(getComunity)
+              })
 
-              setComunity(getComunity)
             }}>
               <div>
                 <input
@@ -99,11 +130,11 @@ export default function Home() {
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
-          <Followers />
+          <Comunidade comunidades={comunidades}/>
 
           <Friends />
 
-          <Comunidade comunidades={comunidades}/>
+          <Followers />
 
         </div>
       </MainGrid>
