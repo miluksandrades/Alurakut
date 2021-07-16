@@ -1,4 +1,6 @@
 import React from 'react';
+import nookies from 'nookies';
+import jwt from 'jsonwebtoken';
 import MainGrid from '../src/components/MainGrid';
 import Box from '../src/components/Box';
 import { AlurakutMenu, AlurakutProfileSidebarMenuDefault, OrkutNostalgicIconSet } from '../src/lib/AluraCommons';
@@ -23,12 +25,11 @@ function ProfileSidebar(props) {
   )
 }
 
-export default function Home() {
+export default function Home(props) {
   const token = '5067fb971a1711c62fd833d3b99a44'
 
-  const githubUser = 'miluksandrades';
-  const [comunidades, setComunity] = React.useState([
-  ]);
+  const usuario = props.githubUser;
+  const [comunidades, setComunity] = React.useState([]);
 
   React.useEffect(() => {
     fetch('https://graphql.datocms.com/', {
@@ -63,15 +64,15 @@ export default function Home() {
 
   return (
     <>
-      <AlurakutMenu githubUser={githubUser} />
+      <AlurakutMenu githubUser={usuario} />
       <MainGrid>
         <div className="profileArea" style={{ gridArea: 'profileArea' }}>
-          <ProfileSidebar githubUser={githubUser} />
+          <ProfileSidebar githubUser={usuario} />
         </div>
         <div className="welcomeArea" style={{ gridArea: 'welcomeArea' }}>
           <Box>
             <h1 className="title">
-              Bem vindo, {githubUser}
+              Bem vindo, {usuario}
             </h1>
 
             <OrkutNostalgicIconSet />
@@ -134,10 +135,38 @@ export default function Home() {
 
           <Friends />
 
-          <Followers />
+          <Followers githubUser={usuario}/>
 
         </div>
       </MainGrid>
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = cookies.USER_TOKEN;
+  
+  const { isAuthenticated } = await fetch('https://alurakut.vercel.app/api/auth', {
+    headers: {
+      Authorization: token
+    }
+  }).then((res) => res.json());
+  
+  if(!isAuthenticated){
+    return{
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
+    }
+  }
+  
+  const {githubUser} = jwt.decode(token);
+  
+  return {
+    props: {
+      githubUser
+    }, // will be passed to the page component as props
+  }
 }

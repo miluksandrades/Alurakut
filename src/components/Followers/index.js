@@ -6,7 +6,7 @@ export function Followers({githubUser}){
     const [seguidores, setSeguidores] = React.useState([]);
 
     React.useEffect(() => {
-        fetch('https://api.github.com/users/miluksandrades/followers')
+        fetch(`https://api.github.com/users/${githubUser}/followers`)
             .then((dados) => {
                 return dados.json();
             })
