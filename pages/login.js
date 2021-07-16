@@ -47,7 +47,6 @@ export default function LoginScreen() {
                     placeholder="Usuário" 
                     value={githubUser} 
                     onChange={(e) =>{
-                        console.log(e.target.value);
                         setGithubUser(e.target.value);
                     }} />
                     {
