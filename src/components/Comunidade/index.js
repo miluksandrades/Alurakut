@@ -1,7 +1,6 @@
 import { ProfileRelationsBoxWrapper } from "../ProfileRelations";
 
 export function Comunidade({comunidades}){
-    const size = 6;
     
     return (
         <ProfileRelationsBoxWrapper>
@@ -9,7 +8,7 @@ export function Comunidade({comunidades}){
               Comunidades ({comunidades.length})
             </h2>
             <ul>
-              {comunidades.slice(0, size).map((item) => {
+              {comunidades.slice(0, 6).map((item) => {
                   return (
                     <li key={item.createdAt}>
                       <a href={`${item.url}`} target="_blank" >
